@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  bingx-exchange-api:
+    build: .
+    image: bingx-exchange-api-img
+    container_name: bingx-exchange-api-container
+    command: uvicorn app.main:app --host 0.0.0.0 --port 80 --reload
+    volumes:
+      - ./:/code
+    ports:
+      - 80:80
+    env_file:
+      - .env
