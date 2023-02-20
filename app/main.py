@@ -1,10 +1,13 @@
 
 from typing import Union
 
-from fastapi import FastAPI, Path
+from fastapi import FastAPI, Path, Depends
 from app.utils.base import api_request
 from pydantic import BaseModel, Field
 from enum import Enum
+# New Imports for main.py
+from fastapi.security.api_key import APIKey
+from app.utils import auth
 
 app = FastAPI()
 
@@ -32,7 +35,8 @@ def read_root():
 
 @app.get("/common_symbol/{symbol}")
 def common_symbol(
-    symbol: str = Path(description='Simbolo a consultar', default='BTC-USDT')
+    symbol: str = Path(description='Simbolo a consultar', default='BTC-USDT'),
+    api_key: APIKey = Depends(auth.get_api_key)
 ):
     response = api_request(
         '/openApi/spot/v1/common/symbols',
